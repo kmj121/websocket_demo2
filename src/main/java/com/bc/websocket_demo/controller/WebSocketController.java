@@ -19,7 +19,7 @@ public class WebSocketController {
      */
     @MessageMapping("/welcome")
     @SendTo("/topic/getResponse")
-    public SocketResponse say(SocketMessage message) throws InterruptedException {
+    public SocketResponse say(SocketMessage message) {
 //        Thread.sleep(3000);
         return new SocketResponse("Welcome,"+message.getName()+"!");
     }
@@ -40,4 +40,5 @@ public class WebSocketController {
 //        Thread.sleep(3000);
         return new SocketResponse("BBB,"+message.getName()+"!");
     }
+
 }

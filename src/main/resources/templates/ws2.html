@@ -24,6 +24,11 @@
 <script type="text/javascript" th:src="@{/jquery.min.js}"></script>
 <script type="text/javascript">
     var stompClient = null;
+    //headers表示客户端的认证信息
+    var headers={
+        username:'admin2',
+        password:'admin2'
+    };
 
     function setConnected(connected) {
         document.getElementById('connect').disabled = connected;
@@ -35,10 +40,6 @@
     function connect() {
         var socket = new SockJS('/endpointWisely'); //连接SockJS的endpoint名称为"/endpointWisely"
         stompClient = Stomp.over(socket);//使用STOMP子协议的WebSocket客户端.
-        var headers={
-            username:'admin2',
-            password:'admin2'
-        };
         stompClient.connect(headers, function(frame) {//连接WebSocket服务端
             setConnected(true);
             console.log('Connected: ' + frame);
@@ -46,6 +47,7 @@
             //谁发送的就推送给谁，特定的以/user开头，spring webscoket能识别带”/user”的订阅路径并做出处理，
             //spring websocket利用UserDestinationMessageHandler进行转化成”/topic/greetings-usererbgz2rq”,
             //”usererbgz2rq”中，user是关键字，erbgz2rq是sessionid，这样子就把用户和订阅路径唯一的匹配起来了
+            //function(response)为每次收到服务器推送的消息时的回调方法
             stompClient.subscribe('/user/topic/AAA', function(respnose){
                 showResponse(JSON.parse(respnose.body).responseMessage);
             });
@@ -55,6 +57,7 @@
 
     function disconnect() {
         if (stompClient != null) {
+            //调用 disconnect() 方法,从客户端主动断开连接
             stompClient.disconnect();
         }
         setConnected(false);
@@ -64,7 +67,7 @@
     function sendName() {
         var name = $('#name').val();
         //通过stompClient.send向/AAA目标发送消息，这个是在控制器的@MessageMapping中定义的
-        stompClient.send("/AAA", {}, JSON.stringify({ 'name': name }));
+        stompClient.send("/AAA", headers, JSON.stringify({ 'name': name }));
     }
 
     function showResponse(message) {
