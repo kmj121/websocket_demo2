@@ -15,5 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/ws").setViewName("/ws");
+        registry.addViewController("/ws2").setViewName("/ws2");
+        registry.addViewController("/ws3").setViewName("/ws3");
     }
 }

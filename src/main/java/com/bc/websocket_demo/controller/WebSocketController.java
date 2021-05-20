@@ -4,7 +4,11 @@ import com.bc.websocket_demo.entity.SocketMessage;
 import com.bc.websocket_demo.entity.SocketResponse;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+
+import javax.websocket.Session;
+import java.security.Principal;
 
 @Controller
 public class WebSocketController {
@@ -18,5 +22,22 @@ public class WebSocketController {
     public SocketResponse say(SocketMessage message) throws InterruptedException {
 //        Thread.sleep(3000);
         return new SocketResponse("Welcome,"+message.getName()+"!");
+    }
+
+
+    @MessageMapping("/AAA")
+    @SendToUser("/topic/AAA")
+    public SocketResponse say2(SocketMessage message) {
+//        System.out.println(principal.getName());
+//        Thread.sleep(3000);
+        return new SocketResponse("AAA,"+message.getName()+"!");
+    }
+
+    @MessageMapping("/BBB")
+    @SendTo("/topic/BBB")
+    public SocketResponse say3(SocketMessage message) {
+//        System.out.println(principal.getName());
+//        Thread.sleep(3000);
+        return new SocketResponse("BBB,"+message.getName()+"!");
     }
 }
